@@ -10,6 +10,6 @@ llm= ChatOpenAI(
     
 )
 
-result=llm.invoke("what is the capital of india")
+result=llm.invoke("Give me the story of the valentine day")
 
 print(result.content)
