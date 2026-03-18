@@ -11,4 +11,4 @@ new_person: Person = {
     "age": '30'
 }
 
-print(new_person)
+print(new_person)  
