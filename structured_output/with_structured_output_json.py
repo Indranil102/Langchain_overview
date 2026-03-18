@@ -10,14 +10,47 @@ load_dotenv()
 model=ChatOpenAI(model="gpt-4o-mini",)
 
 #schema
-class Review(BaseModel): #pydantic class 
-    
-    key_themes:list[str]=Field(description="The main themes or topics discussed in the review")
-    summary:str=Field(description="A brief summary of the review")
-    sentiment:Literal["positive", "negative"]=Field(description="The sentiment of the review, either positive or negative")
-    pros:Optional[list[str]]=Field(description="A list of pros mentioned in the review, if any")
-    cons:Optional[list[str]]=Field(description="A list of cons mentioned in the review, if any")
-    name:Optional[str]=Field(default=None, description="The name of the reviewer")
+json_schema = {
+  "title": "Review",
+  "type": "object",
+  "properties": {
+    "key_themes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Write down all the key themes discussed in the review in a list"
+    },
+    "summary": {
+      "type": "string",
+      "description": "A brief summary of the review"
+    },
+    "sentiment": {
+      "type": "string",
+      "enum": ["pos", "neg"],
+      "description": "Return sentiment of the review either negative, positive or neutral"
+    },
+    "pros": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "string"
+      },
+      "description": "Write down all the pros inside a list"
+    },
+    "cons": {
+      "type": ["array", "null"],
+      "items": {
+        "type": "string"
+      },
+      "description": "Write down all the cons inside a list"
+    },
+    "name": {
+      "type": ["string", "null"],
+      "description": "Write the name of the reviewer"
+    }
+  },
+  "required": ["key_themes", "summary", "sentiment"]
+}
     
     
     # key_themes: Annotated[list[str], "The main themes or topics discussed in the review"]
@@ -26,7 +59,7 @@ class Review(BaseModel): #pydantic class
     # pros:Annotated[Optional[list[str]], "A list of pros mentioned in the review, if any"]
     # cons:Annotated[Optional[list[str]], "A list of cons mentioned in the review, if any"]
     
-structured_model=model.with_structured_output(Review)
+structured_model=model.with_structured_output(json_schema)
 
 result=structured_model.invoke("""I recently upgraded to the Samsung Galaxy S24 Ultra, and I must say, it’s an absolute powerhouse! The Snapdragon 8 Gen 3 processor makes everything lightning fast—whether I’m gaming, multitasking, or editing photos. The 5000mAh battery easily lasts a full day even with heavy use, and the 45W fast charging is a lifesaver.
 
@@ -43,5 +76,5 @@ S-Pen support is unique and useful
 Review by Nitish Singh  """)
 
 # it gives object so use . to fetch the values 
-print(result.name)
+print(result)
 
