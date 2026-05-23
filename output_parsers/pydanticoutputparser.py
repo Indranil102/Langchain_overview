@@ -36,12 +36,7 @@ Give me three facts about a fictional person.
     }
 )
 
-prompt = template.invoke({})
-
-# Generate response
-result = model.invoke(prompt)
-
-# Parse result
-final_result = parser.parse(result.content)
+chain= template | model | parser
+final_result=chain.invoke({})
 
 print(final_result)
