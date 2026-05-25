@@ -147,8 +147,6 @@ branch_chain = RunnableBranch(
 )
 
 
-# ---------------- MAIN CHAIN ---------------- #
-
 chain = RunnableParallel({
 
     # Preserve original feedback
@@ -169,13 +167,11 @@ result = chain.invoke({
 })
 
 
-# ---------------- OUTPUT ---------------- #
 
 print("\nFINAL RESPONSE:\n")
 print(result)
 
 
-# ---------------- GRAPH ---------------- #
 
 print("\nCHAIN GRAPH:\n")
 
